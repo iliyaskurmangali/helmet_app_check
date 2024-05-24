@@ -59,7 +59,7 @@ def video_frame_callback(frame):
 webrtc_streamer(
     key="example",
     video_frame_callback=video_frame_callback,
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun1.voiceeclipse.net:3478"]}]},
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.stunprotocol.org:3478"]}]},
     async_processing=True,
 )
 
