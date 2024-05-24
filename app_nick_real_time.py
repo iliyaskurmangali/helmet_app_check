@@ -2,9 +2,8 @@ import streamlit as st
 from streamlit_webrtc import webrtc_streamer
 import av
 from ultralytics import YOLO
-
 model = YOLO("yolo_v8_25.pt")  # Path to the pre-trained YOLOv5 nano model
-st.title("Are you wearing a helmet?")
+st.title("Real-Time Object Detection with YOLOv8")
 def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
     result = model(img)
@@ -12,5 +11,8 @@ def video_frame_callback(frame):
 webrtc_streamer(
     key="example",
     video_frame_callback=video_frame_callback,
+    rtc_configuration={  # Add this config
+        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+    },
     async_processing=True,
 )
