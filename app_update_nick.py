@@ -21,7 +21,7 @@ def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
 
     # Perform inference on the frame
-    results = model(img)
+    results = model(img, conf=0.7)
 
     # Reset counts for each frame
     helmet_count = 0
@@ -43,7 +43,7 @@ def video_frame_callback(frame):
             # Draw the bounding box
             cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
             # Draw the label
-            cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            #cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     # Update the counts in session state
     st.session_state.helmet_count = helmet_count
