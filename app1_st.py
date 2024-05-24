@@ -35,7 +35,10 @@ def run_camera():
             for detection in result.boxes.data.tolist():
                 x1, y1, x2, y2, conf, class_id = map(int, detection[:6])
                 label = f"{model.names[class_id]} {conf:.2f}"
-                color = (0, 255, 0)  # Bounding box color (green)
+                if model.names[class_id] == "helmet":  # Assuming "helmet" class ID represents people wearing helmets
+                    color = (0, 255, 0)  # Green for hat people
+                else:
+                    color = (0, 0, 255)  # Red for people not wearing helmets
                 # Draw the bounding box
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
                 # Draw the label
