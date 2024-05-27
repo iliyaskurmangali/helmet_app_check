@@ -88,6 +88,7 @@ ctx = webrtc_streamer(
     video_frame_callback=video_frame_callback,
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     async_processing=True,
+    media_stream_constraints={"video": True, "audio": False},  # Disable audio
 )
 
 # Sidebar for displaying detection counts
