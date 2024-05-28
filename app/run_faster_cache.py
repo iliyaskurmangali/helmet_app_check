@@ -5,11 +5,6 @@ import cv2
 from ultralytics import YOLO
 import numpy as np
 
-# Function to load the YOLO model
-@st.cache(allow_output_mutation=True)
-def load_model(model_path):
-    return YOLO(model_path)
-
 # Set up the Streamlit app
 st.set_page_config(page_title="Safety Helmet Detection", page_icon=":construction_worker:", layout="wide")
 st.title(":construction_worker: Safety Helmet Detection")
@@ -37,7 +32,7 @@ helmet_color_bgr = hex_to_bgr(helmet_color)
 no_helmet_color_bgr = hex_to_bgr(no_helmet_color)
 
 # Load the YOLO model
-model = load_model("best_v8_50.pt")  # Path to the pre-trained YOLOv5 model
+model = YOLO("best_v8_50.pt")  # Path to the pre-trained YOLOv5 model
 
 # Initialize session state for counts
 if 'helmet_count' not in st.session_state:

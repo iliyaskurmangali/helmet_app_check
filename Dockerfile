@@ -20,4 +20,4 @@ RUN pip3 install -r requirements.txt
 
 EXPOSE 49152-65535
 
-ENTRYPOINT ["streamlit", "run", "run_faster_cache.py", "--server.port=8080", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "app/run_faster_cache.py", "--server.port=8080", "--server.address=0.0.0.0"]
