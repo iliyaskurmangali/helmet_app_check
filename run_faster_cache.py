@@ -47,10 +47,13 @@ if 'no_helmet_count' not in st.session_state:
 
 # Function to process video frames
 def video_frame_callback(frame):
+    if frame is None:
+        return None
+
     img = frame.to_ndarray(format="bgr24")
 
-    # Resize the frame (adjust the dimensions as needed)
-    img = cv2.resize(img, (480, 320))  # Resize to 640x480 resolution
+    # Resize the frame
+    img = cv2.resize(img, (640, 480))
 
     # Perform inference on the resized frame
     results = model(img, conf=confidence_threshold)
@@ -96,7 +99,6 @@ ctx = webrtc_streamer(
     async_processing=True,
     media_stream_constraints={"video": True, "audio": False},  # Disable audio
 )
-
 
 # Information and instructions
 st.sidebar.markdown("### ℹ️ Instructions")
