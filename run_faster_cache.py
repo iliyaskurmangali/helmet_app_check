@@ -14,7 +14,7 @@ def load_model(model_path):
 st.set_page_config(page_title="Safety Helmet Detection", page_icon=":construction_worker:", layout="wide")
 st.title(":construction_worker: Safety Helmet Detection")
 st.markdown("""
-This application performs real-time object detection using the YOLOv8 model. Adjust the settings in the sidebar to customize the detection.
+This application detects safety helmets in real-time, using the YOLOv8 model. Adjust the settings in the sidebar to customize the detection.
 """)
 
 # Sidebar for additional settings and information
