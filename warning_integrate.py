@@ -113,6 +113,13 @@ st.sidebar.markdown("""
 4. View the video stream with detection annotations.
 """)
 
+# GitHub link
+st.sidebar.markdown("### 📝 Follow the Project on GitHub")
+st.sidebar.markdown("""
+Interested in the code? Follow the project on GitHub!
+- [Helmet Detection App](https://github.com/iliyaskurmangali/helmet_app_check)
+""")
+
 # Advertisement for developers' LinkedIn profiles
 st.sidebar.markdown("### 🌟 Connect with the Developers on LinkedIn")
 st.sidebar.markdown("""
