@@ -43,19 +43,11 @@ if 'no_helmet_count' not in st.session_state:
     st.session_state.no_helmet_count = 0
 
 # Function to process video frames
-frame_skip = 3  # Process every nth frame to reduce load
-frame_counter = 0
-
 def video_frame_callback(frame):
-    global frame_counter
-    frame_counter += 1
-    if frame_counter % frame_skip != 0:
-        return frame
-
     img = frame.to_ndarray(format="bgr24")
 
     # Resize the frame (adjust the dimensions as needed)
-    img = cv2.resize(img, (320, 240))  # Resize to 320x240 resolution
+    img = cv2.resize(img, (480, 360))  # Resize to 480x360 resolution
 
     # Perform inference on the resized frame
     results = model(img, conf=confidence_threshold)
@@ -84,8 +76,8 @@ def video_frame_callback(frame):
             cv2.circle(img, center, radius, color, 2)
 
     # Display the counts on the frame
-    cv2.putText(img, f"Helmet Count: {helmet_count}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, helmet_color_bgr, 2)
-    cv2.putText(img, f"No Helmet Count: {no_helmet_count}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, no_helmet_color_bgr, 2)
+    cv2.putText(img, f"Helmet Count: {helmet_count}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, helmet_color_bgr, 2)
+    cv2.putText(img, f"No Helmet Count: {no_helmet_count}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, no_helmet_color_bgr, 2)
 
     # Update the counts in session state
     st.session_state.helmet_count = helmet_count
@@ -102,13 +94,33 @@ ctx = webrtc_streamer(
     media_stream_constraints={"video": True, "audio": False},  # Disable audio
 )
 
+# Sidebar for displaying detection counts
+st.sidebar.markdown("### 📊 Detection Counts")
+placeholder_helmet = st.sidebar.empty()
+placeholder_no_helmet = st.sidebar.empty()
+
+# Function to update sidebar counts
+def update_sidebar():
+    while True:
+        if ctx.state.playing:
+            with placeholder_helmet:
+                placeholder_helmet.markdown(f"**Helmet Count:** <span style='color: {helmet_color};'>{st.session_state.helmet_count}</span>", unsafe_allow_html=True)
+            with placeholder_no_helmet:
+                placeholder_no_helmet.markdown(f"**No Helmet Count:** <span style='color: {no_helmet_color};'>{st.session_state.no_helmet_count}</span>", unsafe_allow_html=True)
+        time.sleep(1)  # Control the update frequency to avoid overwhelming the UI
+
+# Start the sidebar update function in a separate thread
+thread = threading.Thread(target=update_sidebar)
+thread.start()
+
 # Information and instructions
 st.sidebar.markdown("### ℹ️ Instructions")
 st.sidebar.markdown("""
 1. Adjust the confidence threshold to filter detections.
 2. Toggle drawing bounding boxes or circles on/off.
 3. Choose colors for the bounding boxes.
-4. View the video stream with detection annotations.
+4. Monitor the detection counts in real-time.
+5. View the video stream with detection annotations.
 """)
 
 # Footer with more information
