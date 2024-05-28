@@ -50,7 +50,7 @@ def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
 
     # Resize the frame (adjust the dimensions as needed)
-    img = cv2.resize(img, (640, 480))  # Resize to 640x480 resolution
+    img = cv2.resize(img, (480, 320))  # Resize to 640x480 resolution
 
     # Perform inference on the resized frame
     results = model(img, conf=confidence_threshold)
@@ -97,10 +97,6 @@ ctx = webrtc_streamer(
     media_stream_constraints={"video": True, "audio": False},  # Disable audio
 )
 
-# Footer with more information
-st.markdown("### 📊 Detection Counts")
-st.markdown(f"**Helmet Count:** {st.session_state.helmet_count}")
-st.markdown(f"**No Helmet Count:** {st.session_state.no_helmet_count}")
 
 # Information and instructions
 st.sidebar.markdown("### ℹ️ Instructions")
