@@ -4,11 +4,11 @@ import av
 import cv2
 from ultralytics import YOLO
 import numpy as np
-import threading
-import time
 
-# Load the YOLO model
-model = YOLO("best_v8_50.pt")  # Path to the pre-trained YOLOv5 model
+# Function to load the YOLO model
+@st.cache(allow_output_mutation=True)
+def load_model(model_path):
+    return YOLO(model_path)
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Safety Helmet Detection", page_icon=":construction_worker:", layout="wide")
@@ -36,6 +36,9 @@ def hex_to_bgr(hex_color):
 helmet_color_bgr = hex_to_bgr(helmet_color)
 no_helmet_color_bgr = hex_to_bgr(no_helmet_color)
 
+# Load the YOLO model
+model = load_model("best_v8_50.pt")  # Path to the pre-trained YOLOv5 model
+
 # Initialize session state for counts
 if 'helmet_count' not in st.session_state:
     st.session_state.helmet_count = 0
@@ -47,12 +50,12 @@ def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
 
     # Resize the frame (adjust the dimensions as needed)
-    img = cv2.resize(img, (480, 360))  # Resize to 480x360 resolution
+    img = cv2.resize(img, (640, 480))  # Resize to 640x480 resolution
 
     # Perform inference on the resized frame
     results = model(img, conf=confidence_threshold)
 
-    # Reset counts for each frame
+    # Initialize counts
     helmet_count = 0
     no_helmet_count = 0
 
@@ -79,7 +82,7 @@ def video_frame_callback(frame):
     cv2.putText(img, f"Helmet Count: {helmet_count}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, helmet_color_bgr, 2)
     cv2.putText(img, f"No Helmet Count: {no_helmet_count}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, no_helmet_color_bgr, 2)
 
-    # Update the counts in session state
+    # Update session state counts
     st.session_state.helmet_count = helmet_count
     st.session_state.no_helmet_count = no_helmet_count
 
@@ -94,24 +97,10 @@ ctx = webrtc_streamer(
     media_stream_constraints={"video": True, "audio": False},  # Disable audio
 )
 
-# Sidebar for displaying detection counts
-st.sidebar.markdown("### 📊 Detection Counts")
-placeholder_helmet = st.sidebar.empty()
-placeholder_no_helmet = st.sidebar.empty()
-
-# Function to update sidebar counts
-def update_sidebar():
-    while True:
-        if ctx.state.playing:
-            with placeholder_helmet:
-                placeholder_helmet.markdown(f"**Helmet Count:** <span style='color: {helmet_color};'>{st.session_state.helmet_count}</span>", unsafe_allow_html=True)
-            with placeholder_no_helmet:
-                placeholder_no_helmet.markdown(f"**No Helmet Count:** <span style='color: {no_helmet_color};'>{st.session_state.no_helmet_count}</span>", unsafe_allow_html=True)
-        time.sleep(1)  # Control the update frequency to avoid overwhelming the UI
-
-# Start the sidebar update function in a separate thread
-thread = threading.Thread(target=update_sidebar)
-thread.start()
+# Footer with more information
+st.markdown("### 📊 Detection Counts")
+st.markdown(f"**Helmet Count:** {st.session_state.helmet_count}")
+st.markdown(f"**No Helmet Count:** {st.session_state.no_helmet_count}")
 
 # Information and instructions
 st.sidebar.markdown("### ℹ️ Instructions")
@@ -119,16 +108,7 @@ st.sidebar.markdown("""
 1. Adjust the confidence threshold to filter detections.
 2. Toggle drawing bounding boxes or circles on/off.
 3. Choose colors for the bounding boxes.
-4. Monitor the detection counts in real-time.
-5. View the video stream with detection annotations.
-""")
-
-# Footer with more information
-st.sidebar.markdown("### 📄 More Information")
-st.sidebar.markdown("""
-- **Model:** YOLOv8
-- **Developer:** Nick, Karush, Sayaka, Iliyas
-- **Source Code:** [GitHub](https://github.com/iliyaskurmangali/helmet_app_check)
+4. View the video stream with detection annotations.
 """)
 
 # Advertisement for developers' LinkedIn profiles
