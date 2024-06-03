@@ -1,11 +1,26 @@
-Project Summary:
+Project Summary: Helmet Detection Application
+Vision:
+To enhance workplace safety by detecting helmet usage using machine learning and computer vision.
 
-This project involved collaborating with a team to develop an application using the YOLOv8 model for detecting whether a person is wearing a helmet. If the person is not wearing a helmet, 
-the applications shows the person in red square, and person wears helmet, it shows the person in green square
+Motivation:
+Head injuries are critical in the construction industry. Statistics show around 2,200 deaths from head injuries between 2003 and 2010.
 
-Key Details:
+Data Collection and Preparation:
+Collected high-quality images from https://pan.baidu.com/s/1UbFkGm4EppdAU660Vu7SdQ.
+Reformatted annotations to YOLO format.
 
-Model Training: Over 120 hours of training with YOLOv8, achieving 92.90% precision.
-Data: 7500 images used; data cleaning involved converting label XML files to YOLO format.
-Implementation: Basic application demo available on Streamlit with the source code on GitHub.
-The project demonstrates practical application of machine learning for safety compliance with high accuracy.
+Model Training:
+
+Used YOLOv5 and YOLOv8.
+Over 120 hours of training, 26 hours for the final model.
+Utilized 7,500 images, achieving 92.90% precision.
+Application Development:
+
+Developed with Streamlit and OpenCV.
+Overcame real-time video processing challenges.
+Efficiently processes live video feeds to detect helmet usage.
+
+Demo:
+The app identifies individuals not wearing helmets and updates the count in real-time. It is designed for use on construction sites to notify managers of safety compliance.
+https://helmetdet-app.streamlit.app/
+
