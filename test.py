@@ -109,7 +109,7 @@ def video_frame_callback(frame):
     cv2.putText(img, f"Helmet Count: {helmet_count}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, helmet_color_bgr, 2)
     cv2.putText(img, f"No Helmet Count: {no_helmet_count}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, no_helmet_color_bgr, 2)
 
-    # Play warning sound and log if no helmets are detected with at least 2-second intervals
+    # Play warning sound and log if no helmets are detected with at least 4-second intervals
     current_time = time.time()
     if no_helmet_count > 0 and current_time - last_warning_time >= 4:
         pygame.mixer.Sound.play(warning_sound)
